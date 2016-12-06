@@ -10,7 +10,7 @@ number=0
 while [ "$number" -lt "$TRY" ]
 do
   number=`expr $number + 1 `
-  STATUS=$(curl --connect-timeout $INTERVAL  -s -o /dev/null -w '%{http_code}' "$HOST")
+  STATUS=$(curl -L --connect-timeout $INTERVAL  -s -o /dev/null -w '%{http_code}' "$HOST")
   if [ $STATUS -eq 200 ]; then
      if [ -z "$WORD" ]; then
        exit 0; 
