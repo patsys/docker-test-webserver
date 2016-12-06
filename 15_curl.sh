@@ -9,9 +9,10 @@ fi
 number=0
 while [ "$number" -lt "$TRY" ]
 do
+  before=`date +%s`
   number=`expr $number + 1 `
   STATUS=$(curl -L --connect-timeout $INTERVAL  -s -o /dev/null -w '%{http_code}' "$HOST")
-  if [ $STATUS -eq 200 ]; then
+  if [ $STATUS -eq 200 ] || [ $STATUS -eq 303 ]; then
      if [ -z "$WORD" ]; then
        exit 0; 
      else
@@ -28,6 +29,9 @@ do
     echo "Response $STATUS"
     exit 2
   fi
+  after=`date +%s`
+  diff=$((INTERVAL + after - before))
+  [ "$diff" -gt 0 ] && sleep $diff 
 done
 echo "SERVER not start"
 exit 1
